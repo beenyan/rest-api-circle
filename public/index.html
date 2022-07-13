@@ -1,0 +1,38 @@
+<h1>Sign in</h1>
+<form id="form">
+  Accout: <input type="text" name="account" value="acco" required /><br />
+  Password: <input type="text" name="password" value="ppwwdd" required /><br />
+  <button type="button" id="submit">Submit</button>
+</form>
+
+<h1>check</h1>
+<form id="form2">
+  <button type="button" id="check-token">Submit</button>
+</form>
+
+<script src="/assets/axios.min.js"></script>
+<script>
+  window.onload = () => {
+    let accessToken = '';
+    const form = document.querySelector('#form');
+    const submit = document.querySelector('#submit');
+    submit.addEventListener('click', signIn);
+    const form2 = document.querySelector('#form2');
+    const checkTokenBtn = document.querySelector('#check-token');
+    checkTokenBtn.addEventListener('click', checkToken);
+
+    async function signIn() {
+      const { data } = await axios.post('/api/login', new FormData(form));
+      accessToken = data.data.accessToken;
+    }
+
+    async function checkToken() {
+      const response = await axios.get('/api/check-token', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      console.log(response.headers);
+      console.log(response.data);
+    }
+  };
+</script>
